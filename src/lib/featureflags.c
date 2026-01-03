@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 PureDarwin Project, All rights reserved.
+ * Copyright (c) 2025-2026 The PureDarwin Project, All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted providing that the following conditions
@@ -23,20 +23,47 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <os/assumes.h>
 #include <os/base_private.h>
 #include <os/alloc_once_private.h>
 #include <os/lock.h>
 #include <os/stdlib.h>
 #include <os/feature_internal.h>
-#include <os/debug_private.h>
-#include <System/sys/kdebug.h>
+
+void _os_feature_globals_init(void *ctx)
+{
+    struct _os_feature_globals_s *globals = (struct _os_feature_globals_s *)ctx;
+    
+    globals->once_token = 0;
+}
+
+void _os_feature_table_once(void *ctx)
+{
+    os_fd_t fd = shm_open("org.puredarwin.featureflags.shm", O_RDONLY, 0644);
+    
+}
+
+os_feature_table_t _os_feature_table(void)
+{
+    struct _os_feature_globals_s *feat = _os_feature_globals();
+
+    os_once(&feat->once_token, feat, _os_feature_table_once);
+
+    return feat->feature_table;
+}
+
 
 bool _os_feature_is_enabled_simple_impl(const char *domain, const char *feature, bool fallback)
 {
-    os_feature_log("unimplemented.");
+    FEATURE_INTERNAL_CRASH(0, "=== STUB ===");
     return fallback;
 }
 
+/*
+ * This uses libdarwin's os_simple_hash_string to keep it simple.
+ *
+ * I am NOT wasting cycles on a SHA-256 for this.
+ */
 bool _os_feature_is_enabled_impl(const char *domain, const char *feature)
 {
     os_feature_table_t table = _os_feature_table();
@@ -44,11 +71,11 @@ bool _os_feature_is_enabled_impl(const char *domain, const char *feature)
     char str[2048];
     
     os_feature_log("%s: incoming request for domain %s; feature: %s", __FUNCTION__, domain, feature);
-    
+
     if (table) {
         snprintf(str, 2048, "%s%s", domain, feature);
         hash = os_simple_hash_string(str);
-        
+
         for (int i = 0; i < table->count; i++) {
             if (table->entries[i].hash == hash) {
                 return table->entries[i].enabled;
@@ -61,3 +88,9 @@ bool _os_feature_is_enabled_impl(const char *domain, const char *feature)
      */
     return _os_feature_is_enabled_slow(domain, feature);
 }
+
+bool _os_feature_is_enabled_slow(const char *domain, const char *feature) {
+    FEATURE_INTERNAL_CRASH(0, "=== STUB ===");
+    return false;
+}
+

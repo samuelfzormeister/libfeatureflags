@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 PureDarwin Project, All rights reserved.
+ * Copyright (c) 2025-2026 The PureDarwin Project, All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted providing that the following conditions
@@ -28,6 +28,7 @@
 #define __FEATUREFLAGSSUPPORT_FEATUREFLAGSSUPPORT__
 
 #import <Foundation/Foundation.h>
+#import <FeatureFlagsSupport/FFConfiguration.h>
 #import <FeatureFlagsSupport/FFFeatureState.h>
 
 //! Project version number for FeatureFlagsSupport.

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 PureDarwin Project, All rights reserved.
+ * Copyright (c) 2025-2026 The PureDarwin Project, All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted providing that the following conditions
@@ -29,11 +29,18 @@
 #import <Foundation/Foundation.h>
 #import <FeatureFlagsSupport/FFFeatureState.h>
 
+NS_ENUM(NSUInteger, FFLevel) {
+    
+    FFLevelResolved,
+}
+
 @interface FFConfiguration : NSObject
 
 @property (nonatomic,readonly) NSSet *domains;
 
 - (instancetype) shared;
+
+- (NSURL *) fileURLForLevel;
 
 @end
 

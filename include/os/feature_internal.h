@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 PureDarwin Project, All rights reserved.
+ * Copyright (c) 2025-2026 The PureDarwin Project, All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted providing that the following conditions
@@ -27,12 +27,22 @@
 #ifndef __OS_FEATURE_INTERNAL__
 #define __OS_FEATURE_INTERNAL__
 
+#define __OS_EXPOSE_INTERNALS__ 1
+#include <os/internal/internal_shared.h>
+
 #include <os/alloc_once_private.h>
 #include <os/debug_private.h>
 #include <os/feature_private.h>
 #include <os/lock.h>
 #include <os/stdlib.h>
+
+#if __has_include(<xpc/private.h>)
+#include <xpc/private.h>
+#else
 #include <xpc/xpc.h>
+
+extern xpc_object_t xpc_create_from_plist(void *data, size_t size);
+#endif
 
 __BEGIN_DECLS
 
@@ -71,6 +81,16 @@ const char **_os_feature_search_paths(void);
 #define OS_FEATURE_SYSTEM_PATH "/System/Library/FeatureFlags"
 #define OS_FEATURE_LIBRARY_PATH "/Library/Preferences/FeatureFlags"
 
+#define FEATURE_INTERNAL_CRASH(c, x) __extension__({ \
+        _os_set_crash_log_cause_and_message(c, "BUG IN LIBFEATUREFLAGS: " x); \
+        __builtin_trap(); \
+    })
+
+#define FEATURE_CLIENT_CRASH(c, x) __extension__({ \
+        _os_set_crash_log_cause_and_message(c, \
+                "BUG IN CLIENT OF LIBFEATUREFLAGS: " x); \
+        __builtin_trap(); \
+    })
 __END_DECLS
 
 #endif /* __OS_FEATURE_INTERNAL__ */

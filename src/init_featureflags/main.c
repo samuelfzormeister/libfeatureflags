@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 PureDarwin Project, All rights reserved.
+ * Copyright (c) 2025-2026 The PureDarwin Project, All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted providing that the following conditions
@@ -59,6 +59,7 @@ int main(int argc, const char * argv[])
     ifflog("loading feature flags...");
     
     paths = _os_feature_search_paths();
+    shm_fd = shm_open("org.puredarwin.featureflags.shm", O_RDWR | O_CREAT, 0644);
     
     while (const char *path = paths[i++]; paths != NULL) {
         ifflog("processing %s", path);

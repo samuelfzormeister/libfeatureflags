@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 PureDarwin Project, All rights reserved.
+ * Copyright (c) 2026 The PureDarwin Project, All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted providing that the following conditions
@@ -23,31 +23,14 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <os/assumes.h>
-#include <os/alloc_once_private.h>
-#include <os/lock.h>
-#include <os/stdlib.h>
-#include <os/feature_internal.h>
-#include <xpc/xpc.h>
+#import <Foundation/Foundation.h>
+#import <FeatureFlagsSupport/FeatureFlagsSupport.h>
 
-void _os_feature_globals_init(void *ctx)
+/*
+ * objc lib holds the key i suppose
+ */
+
+void FFDumpFlags(void)
 {
-    struct _os_feature_globals_s *globals = (struct _os_feature_globals_s *)ctx;
-    
-    globals->once_token = 0;
-}
-
-void _os_feature_table_once(void *ctx)
-{
-    os_fd_t fd = shm_open("org.puredarwin.featureflags.shm", O_RDONLY, 0644);
-    os_feature_log("feature table is unimplemented.");
-}
-
-os_feature_table_t _os_feature_table(void)
-{
-    struct _os_feature_globals_s *feat = _os_feature_globals();
-
-    os_once(&feat->once_token, feat, _os_feature_table_once);
-
-    return feat->feature_table;
+    FFConfiguration *cfg = [FFConfiguration shared];
 }

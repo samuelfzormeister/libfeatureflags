@@ -23,8 +23,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
+#import <os/feature_internal.h>
 #import <FeatureFlagsSupport/FeatureFlagsSupport.h>
+
+/* can someone give me secret sauce as to how to format objc code */
 
 @implementation FFFeatureState
 
@@ -35,6 +37,26 @@
     [self setDomain:domain];
     [self setFeature:feature];
     [self setValue:value];
+}
+
+- (NSString *)description
+{
+    NSString *valueString = nil;
+    
+    switch ([self value]) {
+        case 0:
+            valueString = @"disabled";
+            break;
+        case 1:
+            valueString = @"enabled";
+        default:
+            FEATURE_INTERNAL_CRASH(0, "Bad value!");
+            break;
+    }
+
+    return [NSString stringWithFormat:
+            @"Feature %@/%@ state %@",
+            [self domain], [self feature], valueString];
 }
 
 @end
