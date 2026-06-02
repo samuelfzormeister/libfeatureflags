@@ -44,12 +44,18 @@
 extern xpc_object_t xpc_create_from_plist(void *data, size_t size);
 #endif
 
+#if __OS_DONT_USE_XPC__
+#warning This is a note for the logs that XPC has been disabled for this build.
+#endif
+
+
 __BEGIN_DECLS
 
 #define os_feature_log(msg, ...) os_debug_log("libfeatureflags", msg, ## __VA_ARGS__)
 
-/* This should be the in-memory structure for the featureflags shared memory. */
+// --- What init_featureflags puts into the shared memory bufffer. --- //
 struct _os_feature_table_s {
+    uint64_t magic;
     uint32_t count;
     struct {
         uint64_t hash; /**/
@@ -76,10 +82,21 @@ inline struct _os_feature_globals_s *_os_feature_globals(void)
 os_feature_table_t _os_feature_table(void);
 
 bool _os_feature_is_enabled_slow(const char *domain, const char *feature);
-const char **_os_feature_search_paths(void);
 
 #define OS_FEATURE_SYSTEM_PATH "/System/Library/FeatureFlags"
 #define OS_FEATURE_LIBRARY_PATH "/Library/Preferences/FeatureFlags"
+
+OS_INLINE
+const char **_os_feature_search_paths(void)
+{
+    static const char *paths[] = {
+        OS_FEATURE_SYSTEM_PATH,
+        OS_FEATURE_LIBRARY_PATH,
+        NULL,
+    };
+
+    return paths;
+}
 
 #define FEATURE_INTERNAL_CRASH(c, x) __extension__({ \
         _os_set_crash_log_cause_and_message(c, "BUG IN LIBFEATUREFLAGS: " x); \

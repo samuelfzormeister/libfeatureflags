@@ -29,6 +29,7 @@
 #include <os/lock.h>
 #include <os/stdlib.h>
 #include <os/feature_internal.h>
+#include <sys/stat.h>
 
 void _os_feature_globals_init(void *ctx)
 {
@@ -39,7 +40,11 @@ void _os_feature_globals_init(void *ctx)
 
 void _os_feature_table_once(void *ctx)
 {
+    struct stat stat;
+    
     os_fd_t fd = shm_open("org.puredarwin.featureflags.shm", O_RDONLY, 0644);
+    fstat(fd, &stat);
+    
     
 }
 
@@ -53,27 +58,28 @@ os_feature_table_t _os_feature_table(void)
 }
 
 
-bool _os_feature_is_enabled_simple_impl(const char *domain, const char *feature, bool fallback)
+bool _os_feature_enabled_simple_impl(const char *domain, const char *feature, bool fallback)
 {
     FEATURE_INTERNAL_CRASH(0, "=== STUB ===");
     return fallback;
 }
 
 /*
- * This uses libdarwin's os_simple_hash_string to keep it simple.
- *
- * I am NOT wasting cycles on a SHA-256 for this.
+ * This makes the assumption that the
  */
-bool _os_feature_is_enabled_impl(const char *domain, const char *feature)
+bool _os_feature_enabled_impl(const char *domain, const char *feature)
 {
     os_feature_table_t table = _os_feature_table();
+    char *combined_str = malloc(strlen(domain) + strlen(feature) + 1);
     uint64_t hash;
-    char str[2048];
+    char str[512];
     
     os_feature_log("%s: incoming request for domain %s; feature: %s", __FUNCTION__, domain, feature);
 
     if (table) {
-        snprintf(str, 2048, "%s%s", domain, feature);
+        
+        
+        snprintf(str, 512, "%s%s", domain, feature);
         hash = os_simple_hash_string(str);
 
         for (int i = 0; i < table->count; i++) {
@@ -89,8 +95,19 @@ bool _os_feature_is_enabled_impl(const char *domain, const char *feature)
     return _os_feature_is_enabled_slow(domain, feature);
 }
 
-bool _os_feature_is_enabled_slow(const char *domain, const char *feature) {
-    FEATURE_INTERNAL_CRASH(0, "=== STUB ===");
+bool _os_feature_enabled_slow(const char *domain, const char *feature) {
+#if __OS_DONT_USE_XPC__ == 0
+    char path[PATH_MAX];
+    const char **search_paths = _os_feature_search_paths();
+    
+    while (search_paths != NULL) {
+        <#statements#>
+    }
+#else
+    /* TODO: libplatform needs to be updated to enable libCrashReporterClient in libSystem */
+    FEATURE_INTERNAL_CRASH(1, "XPC was disabled on this build of libfeatureflags.");
+#endif
+    
     return false;
 }
 

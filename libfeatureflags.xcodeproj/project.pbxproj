@@ -22,8 +22,6 @@
 
 /* Begin PBXBuildFile section */
 		F06AF9572E7F79B3008209DE /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F06AF9562E7F79B3008209DE /* CoreFoundation.framework */; };
-		F06AF95A2E80C82B008209DE /* paths.c in Sources */ = {isa = PBXBuildFile; fileRef = F06AF9592E80C82B008209DE /* paths.c */; };
-		F06AF95B2E80C82B008209DE /* paths.c in Sources */ = {isa = PBXBuildFile; fileRef = F06AF9592E80C82B008209DE /* paths.c */; };
 		F06E515C2E83CF6C00D94165 /* FeatureFlagsSupport.h in Headers */ = {isa = PBXBuildFile; fileRef = F06E515A2E83CF6C00D94165 /* FeatureFlagsSupport.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F06E51622E83CF9600D94165 /* FFFeatureState.h in Headers */ = {isa = PBXBuildFile; fileRef = F06E51612E83CF9600D94165 /* FFFeatureState.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F06E51642E83D0A600D94165 /* FFConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = F06E51632E83D0A600D94165 /* FFConfiguration.m */; };
@@ -72,7 +70,6 @@
 /* Begin PBXFileReference section */
 		F06AF9562E7F79B3008209DE /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		F06AF9582E80BBBE008209DE /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		F06AF9592E80C82B008209DE /* paths.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = paths.c; sourceTree = "<group>"; };
 		F06E51582E83CF6C00D94165 /* FeatureFlagsSupport.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FeatureFlagsSupport.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F06E515A2E83CF6C00D94165 /* FeatureFlagsSupport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FeatureFlagsSupport.h; sourceTree = "<group>"; };
 		F06E515B2E83CF6C00D94165 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -230,7 +227,6 @@
 			isa = PBXGroup;
 			children = (
 				F0BC8CE72DA7794B0022160A /* featureflags.c */,
-				F06AF9592E80C82B008209DE /* paths.c */,
 			);
 			path = lib;
 			sourceTree = "<group>";
@@ -445,7 +441,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F06AF95A2E80C82B008209DE /* paths.c in Sources */,
 				F0BC8CE82DA7794B0022160A /* featureflags.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -454,7 +449,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F06AF95B2E80C82B008209DE /* paths.c in Sources */,
 				F0BC8CE92DA7794B0022160A /* featureflags.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

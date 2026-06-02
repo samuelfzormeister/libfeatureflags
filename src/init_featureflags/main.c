@@ -32,6 +32,12 @@
 #include <fts.h>
 #include <CoreFoundation/CoreFoundation.h>
 
+/*
+ * For this binary, we want to avoid using XPC services (for obvious reasons)
+ *
+ * launchd needs an upgrade...
+ */
+
 static void ifflog(const char *fmt, ...)
 {
     va_list list;
@@ -43,11 +49,18 @@ static void ifflog(const char *fmt, ...)
     cfFormat = CFStringCreateWithCString(kCFAllocatorDefault, fmt, kCFStringEncodingASCII);
     cfString = CFStringCreateWithFormatAndArguments(kCFAllocatorDefault, NULL, cfFormat, list);
 
-    fprintf(stderr, "init_featureflags: %s\n", CFStringGetCStringPtr(cfString, kCFStringEncodingASCII));
+    fprintf(stdout, "init_featureflags: %s\n", CFStringGetCStringPtr(cfString, kCFStringEncodingASCII));
 
     CFRelease(cfFormat);
     CFRelease(cfString);
     va_end(list);
+}
+
+CFDictionaryRef load_property_list();
+
+void add_feature_directory(const char *directory)
+{
+    /* There are several paths we need to check. */
 }
 
 int main(int argc, const char * argv[])
